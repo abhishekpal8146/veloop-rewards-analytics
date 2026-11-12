@@ -1,0 +1,26 @@
+﻿day,phase,primary_activity,required_outputs,deliverables,dependency,status,completed_on,notes
+1,Intake and evidence controls,Brief decomposition and product source review,SA; draft 19,02; 19,Assignment brief,Complete,2026-11-09,Working schedule retains Day 25 despite brief header stating 22–24 days; sources SRC-001…SRC-011 registered; GitHub repo excluded as evidence
+2,Intake and evidence controls,Confirm Confirmed/Proposed/To Be Verified classifications,SA; classification rules,02; 19,Day 1,Complete,2026-11-10,Classification legend in Deliverable 02 section 2; ASM-001…ASM-008 recorded
+3,Product audit,Product Data Audit and Data Coverage Matrix,02; 03; SC1,02; 03,Days 1–2,Complete,2026-11-11,Deliverable 02 and 03 created from public website evidence only
+4,Product audit,Complete analytics-gap identification,03; SC1,03,Day 3,Complete,2026-11-11,12 analytics gaps in analytics_gaps.csv (requirement: at least 10) with priority and reason; completed ahead of schedule during Day 3
+5,User analytics,Identity registration login onboarding requirements,04; SD1,04,Days 3–4,Not started,,Avoid unnecessary personal information
+6,User analytics,Account lifecycle and user analytics specification,04,04,Day 5,Not started,,Status values remain Proposed until verified
+7,Earning and reward analytics,Task lifecycle and failed-activity classification,05; SE1,05,Days 3–4,Not started,,Failure taxonomy remains Proposed until verified
+8,Earning and reward analytics,Reward lifecycle and third-party dependencies,05; SE2,05,Day 7,Not started,,Distinguish activity from reward credited
+9,Wallet and withdrawal analytics,Wallet transaction model,06; SF1,06,Days 3–4,Not started,,Unsupported transaction types remain Proposed
+10,Wallet and withdrawal analytics,Withdrawal lifecycle and KPI requirements,06; SF1,06,Day 9,Not started,,No success-rate claim may be derived yet
+11,Referral and engagement analytics,Referral lifecycle and engagement measures,07; SG1,07,Days 3–4,Not started,,Registration must not equal conversion by assumption
+12,Event tracking,Event catalogue construction,08,08,04–07,Not started,,Cover at least 25 meaningful events
+13,Event tracking,Event properties status and KPI dependencies,08,08,Day 12,Not started,,Proposed events must not be described as implemented
+14,Event tracking,Apply and document event naming standard,08; SH1,08,Day 13,Not started,,Use one consistent convention and explain it
+15,Data dictionary,Define meaningful entity fields,09,09,08,Not started,,Target 75+ meaningful fields without padding
+16,Data dictionary,Validate definitions sources and status labels,09,09,Day 15,Not started,,Every field needs a definition and analytical use
+17,Logical data model,Define entities and primary keys,10; SI1,10,09,Not started,,Start with required entities
+18,Logical data model,Document foreign keys relationships and ER diagram,10; SJ1; SK1,10,Day 17,Not started,,Diagram must be engineer-readable
+19,KPI catalogue,Define 30+ reproducible KPIs,11,11,08–10,Not started,,No fictional targets or company results
+20,Simulated data,Profile supplied datasets and test relationships,12; SL1; SL2,12,09–11 and data,Blocked: data,,Dataset files have not been supplied
+21,Data quality,Audit Messy Data and document findings,13; SM1,13,12 and data,Blocked: data,,Count only observed records
+22,Dashboard blueprint,Specify seven dashboards and wireframes,14; SO1–SO7,14,11–13,Not started,,Specifications may precede final data validation
+23,Developer handoff,Specify critical event payloads and tests,15; SP1,15,08,Not started,,Engineering acceptance tests must be testable
+24,Operating model,Pipeline governance controls and readiness assessment,16; 17; 18; SN1; SR1; ST1,16; 17; 18,10–13 and registers,Partially blocked: data,,Readiness evidence requires dataset findings
+25,Final consolidation,Backlog assumptions executive summary and final QA,19; 20; 01; 21,19; 20; 01; 21,02–20,Not started,,Executive Summary prepared after evidence findings risks and priorities

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VELOOP Rewards — Data Analytics Internship Project</title>
+<style>
+  :root {
+    --ink: #1a2332;
+    --muted: #5a6a7e;
+    --line: #dde4ec;
+    --bg: #f6f8fb;
+    --card: #ffffff;
+    --accent: #0f62fe;
+    --accent-dark: #0043ce;
+    --green: #198038;
+    --amber: #b28600;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.6;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 20px; }
+  header {
+    background: var(--card);
+    border-bottom: 1px solid var(--line);
+    padding: 40px 0 28px;
+  }
+  h1 { font-size: 1.7rem; margin: 0 0 6px; }
+  .subtitle { color: var(--muted); font-size: 1.02rem; margin: 0; }
+  .notice {
+    margin: 18px 0 0;
+    padding: 12px 16px;
+    background: #eef4ff;
+    border: 1px solid #c9d8ff;
+    border-radius: 8px;
+    font-size: 0.95rem;
+  }
+  .notice strong { color: var(--accent-dark); }
+  main { padding: 28px 0 48px; }
+  section {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 22px 26px;
+    margin-bottom: 22px;
+  }
+  h2 { font-size: 1.18rem; margin: 0 0 12px; }
+  p { margin: 8px 0; }
+  ul { margin: 8px 0; padding-left: 22px; }
+  li { margin: 6px 0; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent-dark); text-decoration: underline; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: #f0f3f8; font-weight: 600; }
+  .status { display: inline-block; padding: 1px 10px; border-radius: 999px; font-size: 0.82rem; font-weight: 600; }
+  .done { background: #defbe6; color: var(--green); }
+  .next { background: #fff3ce; color: var(--amber); }
+  .pending { background: #eef1f5; color: var(--muted); }
+  code {
+    font-family: Consolas, "Courier New", monospace;
+    background: #f0f3f8;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.88em;
+  }
+  pre {
+    background: #10161f;
+    color: #e6edf6;
+    padding: 14px 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+  }
+  footer {
+    padding: 20px 0 40px;
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>VELOOP Rewards — Data Analytics Internship Project</h1>
+    <p class="subtitle">Data Analyst Internship, Task 01 · Product analytics, data readiness &amp; data management blueprint</p>
+    <p class="notice"><strong>Please note:</strong> this is a <strong>documentation and specification project</strong>. The deliverables are reports, spreadsheets, and engineering handoff documents — not a live analytics application or dashboard.</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <h2>About this project</h2>
+    <p>
+      This project builds the analytics and data-readiness blueprint for the VELOOP Rewards platform during a
+      Data Analyst internship. It maps the product's features, user actions, and reward mechanics from
+      <em>verified public sources only</em>, and defines the events, fields, models, and KPIs the product
+      will need for reliable analytics.
+    </p>
+    <p>
+      The work follows an evidence-first policy: every product claim is traced to a registered source,
+      every feature is labelled <em>Confirmed (Public Documentation)</em>, <em>Proposed</em>, or
+      <em>To Be Verified</em>, and no simulated data is ever presented as actual VELOOP business statistics.
+    </p>
+  </section>
+
+  <section>
+    <h2>Completed work</h2>
+    <table>
+      <tr><th>Deliverable</th><th>Content</th><th>Status</th></tr>
+      <tr>
+        <td><a href="https://github.com/abhishekpal8146/veloop-rewards-analytics/blob/main/submission/02_product_data_audit/product_data_audit.md">02 — Product Data Audit</a></td>
+        <td>28-area product map, user action inventory, system outcome taxonomy, source contradictions, gaps summary</td>
+        <td><span class="status done">Complete</span></td>
+      </tr>
+      <tr>
+        <td><a href="https://github.com/abhishekpal8146/veloop-rewards-analytics/blob/main/submission/03_data_coverage_matrix/data_coverage_matrix.csv">03 — Data Coverage Matrix</a></td>
+        <td>36 rows × 14 columns: product area, feature, user/system actions, data required, proposed events, source, business question, status, priority</td>
+        <td><span class="status done">Complete</span></td>
+      </tr>
+      <tr>
+        <td><a href="https://github.com/abhishekpal8146/veloop-rewards-analytics/blob/main/submission/03_data_coverage_matrix/analytics_gaps.csv">03 — Analytics Gaps (SC1)</a></td>
+        <td>12 prioritized analytics gaps (4 Critical, 5 High, 3 Medium) with impact, rationale, and mitigation</td>
+        <td><span class="status done">Complete</span></td>
+      </tr>
+      <tr>
+        <td><a href="https://github.com/abhishekpal8146/veloop-rewards-analytics/blob/main/docs/requirements_and_deliverable_register.md">Requirements &amp; Deliverable Register</a></td>
+        <td>All 21 deliverables with formats, dependencies, schedule, and status</td>
+        <td><span class="status done">Complete</span></td>
+      </tr>
+      <tr>
+        <td>04 — User Analytics Specification</td>
+        <td>Identity, registration, login, onboarding, and account lifecycle requirements</td>
+        <td><span class="status next">In progress — next</span></td>
+      </tr>
+      <tr>
+        <td>12–13 — Dataset profiling &amp; quality audit</td>
+        <td>Depend on the supplied simulated dataset</td>
+        <td><span class="status pending">Blocked: dataset pending</span></td>
+      </tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Control registers &amp; evidence</h2>
+    <ul>
+      <li><a href="https://github.com/abhishekpal8146/veloop-rewards-analytics/blob/main/registers/source_and_verification_register.csv">Source &amp; Verification Register</a> — every cited source (SRC-001…SRC-011) with classification, limitations, and evidence label, including one explicitly EXCLUDED third-party repository.</li>
+      <li><a href="https://github.com/abhishekpal8146/veloop-rewards-analytics/blob/main/registers/assumption_and_verification_register.csv">Assumption &amp; Verification Register</a> — open questions (ASM-001…ASM-008) with owner, risk, and verification action.</li>
+      <li><a href="https://github.com/abhishekpal8146/veloop-rewards-analytics/blob/main/registers/progress_tracker.csv">Progress Tracker</a> — the 25-day working schedule with per-day status.</li>
+      <li><a href="https://github.com/abhishekpal8146/veloop-rewards-analytics/blob/main/outputs/evidence/source_http_verification_2026-11-10.md">Source availability log — 2026-11-10</a> and <a href="https://github.com/abhishekpal8146/veloop-rewards-analytics/blob/main/outputs/evidence/source_http_verification_2026-11-11.csv">2026-11-11 re-check</a> — HTTP verification of all public sources used.</li>
+      <li><a href="https://github.com/abhishekpal8146/veloop-rewards-analytics/blob/main/docs/plans/2026-11-10-stage-1-scaffolding-plan.md">Stage 1 implementation plan</a>.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Verification</h2>
+    <p>Structure and deliverable checks are automated. On Windows PowerShell 5.1:</p>
+    <pre>powershell.exe -NoProfile -ExecutionPolicy Bypass -File ".\tests\verify_stage1.ps1"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File ".\tests\verify_stage2.ps1"</pre>
+    <p>Both scripts currently pass (7/7 checks each), covering directory structure, the 21-deliverable register, the source and assumption registers, the progress tracker, and the structure of Deliverables 02 and 03.</p>
+  </section>
+
+  <section>
+    <h2>Integrity policy</h2>
+    <ul>
+      <li>Public website content is treated as <strong>Public Website Source</strong> — documented product information, not verified internal engineering documentation.</li>
+      <li>No fabricated business metrics; no simulated data presented as actual users, earnings, withdrawals, revenue, retention, or conversion figures.</li>
+      <li>Marketing-page numbers are illustrative only and are excluded from all analysis.</li>
+      <li>Open questions are tracked as assumptions with named owners — nothing is silently assumed.</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    VELOOP Rewards — Data Analytics Internship Project · Documentation &amp; specification repository · Accessible without login
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+# Local-only pre-correction snapshots (retained in the OneDrive workspace, not published)
+data/interim/backups/
+
+# OS / editor artifacts
+Thumbs.db
+Desktop.ini
+.DS_Store
