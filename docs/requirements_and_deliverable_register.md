@@ -31,9 +31,9 @@ The brief header states 22–24 days, while its explicit working schedule runs t
 | 01 | Executive Summary | 2–4 page document | Evidence, findings, risks, and priorities from 02–20 | Days 24–25 | Not started |
 | 02 | Product Data Audit | Detailed report | Product review and Work Package A | Days 3–4 | Complete (2026-11-10) |
 | 03 | Data Coverage Matrix | Spreadsheet | 02 plus at least 10 analytics gaps | Days 3–4 | Complete (2026-11-10) — 12 gaps in `analytics_gaps.csv` |
-| 04 | User Analytics Specification | Document/spreadsheet | Product review and Work Package B | Days 5–6 | Not started |
-| 05 | Earning & Reward Analytics Specification | Document | Product review and Work Package C | Days 7–8 | Not started |
-| 06 | Wallet & Withdrawal Analytics Specification | Document | Product review and Work Package D | Days 9–10 | Not started |
+| 04 | User Analytics Specification | Document (`submission\04_user_analytics_specification\user_analytics_specification.md.txt`) | Product review and Work Package B | Days 5–6 | Complete (2026-11-13) |
+| 05 | Earning & Reward Analytics Specification | Document (`submission\05_earning_reward_analytics\earning_reward_analytics_specification.md`) | Product review and Work Package C | Days 7–8 | Complete (2026-11-16) |
+| 06 | Wallet & Withdrawal Analytics Specification | Document (`submission\06_wallet_withdrawal_analytics\wallet_withdrawal_analytics_specification.md`) | Product review and Work Package D | Days 9–10 | Complete (2026-11-16) |
 | 07 | Referral & Engagement Analytics | Document | Product review and Work Package E | Day 11 | Not started |
 | 08 | Event Tracking Plan | Spreadsheet | 04–07, naming standard, 25+ meaningful events | Days 12–14 | Not started |
 | 09 | Data Dictionary | Spreadsheet | 08, 75+ meaningful fields | Days 15–16 | Not started |
@@ -59,10 +59,10 @@ The brief header states 22–24 days, while its explicit working schedule runs t
 | SB2 | User Action Inventory | 02, 08 |
 | SB3 | System Outcome Inventory | 02, 08 |
 | SC1 | Analytics Gap List | 03, 18, 20 |
-| SD1 | Identity Requirements | 04, 09, 10 |
-| SE1 | Failed-Activity Classification | 05, 08 |
-| SE2 | Reward-Event Requirements | 05, 08 |
-| SF1 | Withdrawal Lifecycle | 06, 08 |
+| SD1 | Identity Requirements (`submission\04_user_analytics_specification\user_analytics_specification.md.txt` §2) | 04, 09, 10 | Complete (2026-11-13) |
+| SE1 | Failed-Activity Classification (`submission\05_earning_reward_analytics\se1_failed_activity_classification.md`) | 05, 08 | Complete (2026-11-16) |
+| SE2 | Reward-Event Requirements (`submission\05_earning_reward_analytics\se2_reward_event_requirements.md`) | 05, 08 | Complete (2026-11-16) |
+| SF1 | Withdrawal Lifecycle (`submission\06_wallet_withdrawal_analytics\sf1_withdrawal_lifecycle.md`) | 06, 08 | Complete (2026-11-16) |
 | SG1 | Referral Lifecycle | 07, 08 |
 | SH1 | Event Naming Standard | 08 |
 | SI1 | Primary-Key Register | 10 |
@@ -120,11 +120,12 @@ Product features, events, fields, entities, KPIs, controls, dashboards, pipeline
 7. Keep generated simulated data explicitly labelled and method-documented.
 8. Keep supplied raw data unchanged.
 
-## Stage 1 status
+## Current project status (as of Review Day, 2026-11-16)
 
-- Approved folder structure: complete.
-- Requirements and deliverable register: complete.
-- Source & Verification Register template: complete.
-- Assumption & Verification Register template: complete.
-- Progress tracker: complete.
-- Product analysis and deliverables 02–21: not started.
+- Stage 1 infrastructure and governance registers: Complete.
+- Deliverable 02 (Product Data Audit): Complete (2026-11-10).
+- Deliverable 03 (Data Coverage Matrix & Analytics Gaps): Complete (2026-11-10) — 12 gaps registered in `analytics_gaps.csv`.
+- Deliverable 04 (User Analytics Specification) + SD1: Complete (2026-11-13).
+- Deliverable 05 (Earning & Reward Analytics Specification) + SE1 + SE2: Complete (2026-11-16) — verified against C1–C4 requirements.
+- Deliverable 06 (Wallet & Withdrawal Analytics Specification) + SF1: Complete (2026-11-16) — remediated with OQ-10 and D1 Master Model.
+- Deliverables 01, 07–21: Scheduled in accordance with work plan.

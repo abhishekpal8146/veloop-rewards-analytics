@@ -1,0 +1,268 @@
+# VELOOP Rewards — User Analytics Specification
+
+## 1. Document Overview
+
+**Deliverable:** D04 — User Analytics Specification  
+**Work Package:** B — User Analytics
+
+### 1.1 Purpose
+
+This document defines the user identity requirements and analytical data structure needed to track the user lifecycle within the VELOOP Rewards platform.
+
+It covers registration, login, onboarding, account lifecycle, and user activity tracking.
+
+### 1.2 Scope
+
+The specification focuses on:
+
+- Identifying users consistently across multiple activities.
+- Tracking login events and user sessions.
+- Recording important onboarding milestones.
+- Monitoring account lifecycle changes.
+- Supporting reliable user analytics and reporting.
+
+**Important:** This document defines proposed analytics requirements. Actual implementation and source availability must be verified before treating these requirements as confirmed system capabilities.
+
+## 2. B1 — User Identity Requirements
+
+### 2.1 Stable User ID
+
+- **Purpose:** Uniquely identifies an individual user across the platform.
+- **Example:** `USR_1001`
+- **Requirement:** Required.
+- **Validation:** Must be unique, non-empty, and persistent.
+- **Reason:** Enables user activity to be linked across registration, login, onboarding, and subsequent interactions.
+
+### 2.2 Event ID
+
+- **Purpose:** Uniquely identifies an individual user activity or event.
+- **Example:** `EVT_001`
+- **Requirement:** Required for tracked events.
+- **Validation:** Must be unique for each event record.
+- **Reason:** Prevents separate activities from being confused or merged.
+
+### 2.3 Session ID
+
+- **Purpose:** Groups activities performed during a single user session.
+- **Example:** `SES_001`
+- **Requirement:** Required where session tracking applies.
+- **Validation:** Must uniquely identify a session and associate relevant events with it.
+- **Reason:** Helps analyse session activity, duration, and engagement.
+
+### 2.4 Transaction ID
+
+- **Purpose:** Uniquely identifies an individual transaction, such as a reward redemption.
+- **Example:** `TXN_001`
+- **Requirement:** Required for transaction records.
+- **Validation:** Must be unique for each transaction.
+- **Reason:** Supports accurate transaction tracking and prevents duplicate or mixed transaction records.
+
+### 2.5 Identity Management Rules
+
+1. Each user must have one stable User ID.
+2. The User ID must remain unchanged when the user's email address or other contact information changes.
+3. Email addresses should not be used as the primary analytics identifier.
+4. Each tracked event must have its own Event ID.
+5. Each session should have a distinct Session ID.
+6. Each transaction must have its own Transaction ID.
+7. Different users must never share the same Stable User ID.
+
+## 3. B2 — Field-wise Data Specification
+
+This section specifies the fields that are actually evidenced in the two source workbooks stored in `source datasets/`. Fields are organised by entity: user, session, event, daily activity, task activity, and milestone.
+
+### 3.1 Source workbooks
+
+| Workbook | Referred to as | Sheets (record counts) | Declared status (from its own README sheet) |
+|---|---|---|---|
+| `VELoop_Rewards_Data_01.xlsx` | **Task 01 workbook** | `Users_1000_Clean` (1,000 users), `Users_Messy_Audit` (1,008 audit rows), `Data_Dictionary`, `Synthetic_Summary`, `README_Data_Status` | "SIMULATED / FICTIONAL / FOR ANALYTICAL WORK ONLY"; "Actual VELOOP data: NO" |
+| `VELOOP_Simulated_User_Behavior_1000.xlsx` | **Task 02 workbook** | `01_Users_1000` (1,000), `02_Sessions` (7,913), `03_Feature_Events` (35,704), `04_Daily_Activity` (6,667), `05_Task_Activity` (9,846), `06_Milestones` (4,799), `07_Feature_Usage` (15 features), `08_Data_Dictionary`, `09_README_Status`, `10_Event_Data_Quality_Audit` (35,714) | "SIMULATED / FICTIONAL / FOR ANALYTICAL WORK ONLY"; "Actual VELOOP production data: NO" |
+
+Both workbooks state the analysis period **01 Apr 2026 – 15 Sep 2026**, and both impose a citation rule: use wording such as "In the provided simulated dataset…" and never present results as actual VELOOP metrics.
+
+**Important:** A field being present in these workbooks proves it exists in the *simulated* datasets. It does **not** prove the field exists in the production VELOOP platform.
+
+### 3.2 How to read the field tables
+
+- **Field** — the column name exactly as it appears in the workbook.
+- **Type** — taken from the workbook's own data dictionary where one exists; otherwise marked *(observed)* and inferred from sample rows actually read.
+- **Required?** — from the workbook data dictionary: Required / Optional / Conditional / Derived. "Not specified" means the workbook's data dictionary does not cover this field.
+- **Purpose** — the data dictionary definition where available; otherwise a short description of the role the field plays in its sheet.
+- **Source** — the workbook and sheet(s) where the field was observed.
+- **Validation** — the rule stated in the workbook data dictionary; "Not defined in data dictionary" where the workbook provides none.
+- **Status** — *Evidenced (simulated)* means the field is present in the named simulated workbook(s); *Unverified (production requirement)* means B1 requires it but it is absent from both workbooks.
+
+### 3.3 Identifier fields (mapping B1 to the datasets)
+
+| Field | Type | Required? | Purpose | Source | Validation | Status |
+|---|---|---|---|---|---|---|
+| `user_id` | String | Required | Stable user identifier; joins every behavioural table to one user. Observed format: `VLUSR000001` | Task 01 `Users_1000_Clean`, `Users_Messy_Audit`; Task 02 `01_Users_1000` and all behavioural sheets | Unique; non-null (Task 01 dictionary); Unique/non-null (Task 02 dictionary) | Evidenced (simulated) — both workbooks |
+| `session_id` | String | Required | One identifier per session; referenced by events, task activities, and milestones. Observed format: `SESS0000001` | Task 02 `02_Sessions` (primary), referenced in `03_Feature_Events`, `05_Task_Activity`, `06_Milestones` | Unique/non-null (Task 02 dictionary) | Evidenced (simulated) — Task 02 workbook only |
+| `event_id` | String | Required | One identifier per behavioural event record. Observed format: `EVT00000001` | Task 02 `03_Feature_Events`, `10_Event_Data_Quality_Audit` | Unique/non-null (Task 02 dictionary) | Evidenced (simulated) — Task 02 workbook only |
+| `transaction_id` | — | Required (B1 §2.4, for transaction records) | Identifies an individual transaction such as a reward redemption. B1 example format: `TXN_001` | Not present in either workbook | Not defined in any workbook | **Unverified (production requirement)** — no transaction or redemption identifier exists in either simulated dataset |
+
+#### Session ID vs Event ID — not interchangeable
+
+- A **session** is one block of activity by one user: `02_Sessions` holds one row per session (7,913 rows).
+- An **event** is one specific action inside a session: `03_Feature_Events` holds one row per event (35,704 rows).
+- The event sheet carries **both** identifiers: `event_id` is unique per row, while `session_id` repeats across the rows that belong to the same session (for example, `SESS0000001` contains events `EVT00000001`, `EVT00000002`, `EVT00000003`, …).
+- In short: `session_id` answers *"in which session did this happen?"* and `event_id` answers *"which specific action was this?"*. They must never be used interchangeably — grouping on `session_id` merges all actions of a session, and `event_id` alone cannot recover session grouping (only the `session_id` column on the event row can).
+
+**Closest thing to a transaction in the simulated data:** `reward_status` in `05_Task_Activity` (observed values `Credited`, `Not Credited`) records a reward-credit outcome for a task activity. It is **not** a transaction identifier and must not be treated as `transaction_id`.
+
+### 3.4 User profile fields
+
+The user sheets of both workbooks share most columns. The Task 02 user sheet uses `verification_status` where the Task 01 sheets use `email_verification_status` (see Open Questions, §6). `user_id` is specified in §3.3.
+
+| Field | Type | Required? | Purpose | Source | Validation | Status |
+|---|---|---|---|---|---|---|
+| `full_name` | String | Required | Simulated display name | Task 01 user sheets; Task 02 `01_Users_1000` | Non-empty (Task 01 dictionary) | Evidenced (simulated) — both workbooks |
+| `email` | String | Required | Simulated email address. Stored as an attribute; B1 §2.5(3) says email must not be the primary analytics identifier | Task 01 user sheets; Task 02 `01_Users_1000` | Valid email format (Task 01 dictionary) | Evidenced (simulated) — both workbooks |
+| `age` | Integer | Required | Simulated age | Task 01 user sheets; Task 02 `01_Users_1000` | 18+ in supplied dataset (Task 01 dictionary) | Evidenced (simulated) — both workbooks |
+| `gender` | Categorical | Optional | Simulated gender (observed: Male, Female, Prefer not to say) | Task 01 user sheets; Task 02 `01_Users_1000` | Controlled values (Task 01 dictionary) | Evidenced (simulated) — both workbooks |
+| `state` | Categorical | Required | Simulated Indian state | Task 01 user sheets; Task 02 `01_Users_1000` | Controlled list (Task 01 dictionary) | Evidenced (simulated) — both workbooks |
+| `city` | Categorical | Required | Simulated city | Task 01 user sheets; Task 02 `01_Users_1000` | City-state consistency (Task 01 dictionary) | Evidenced (simulated) — both workbooks |
+| `registration_datetime` | Datetime (stored as Excel serial) | Required | Simulated account registration time | Task 01 user sheets; Task 02 `01_Users_1000` | Valid datetime (both dictionaries) | Evidenced (simulated) — both workbooks |
+| `acquisition_source` | Categorical | Required | Simulated acquisition source (observed: Organic Search, Direct, WhatsApp, Referral) | Task 01 user sheets; Task 02 `01_Users_1000`, `03_Feature_Events`, `10_Event_Data_Quality_Audit` | Controlled source list (Task 01 dictionary); Controlled list (Task 02 dictionary) | Evidenced (simulated) — both workbooks |
+| `referral_source_detail` | Categorical | Conditional | Detail for referral acquisition; empty for non-referral users in the rows read | Task 01 user sheets; Task 02 `01_Users_1000` | Controlled values (Task 01 dictionary) | Evidenced (simulated) — both workbooks |
+| `primary_device` | Categorical | Required | Simulated primary device (observed: Android, Windows) | Task 01 user sheets; Task 02 `01_Users_1000` | Android/iOS/Windows/macOS (Task 01 dictionary); Controlled list (Task 02 dictionary) | Evidenced (simulated) — both workbooks |
+| `platform` | Categorical (observed: Web) | Not specified | Platform on which the user's activity occurs | Task 01 user sheets; Task 02 user, session, and event sheets | Not defined in either workbook's data dictionary | Evidenced (simulated) — both workbooks |
+| `account_status` | Categorical | Required | Simulated account state (observed: Active, Inactive, Suspended) | Task 01 user sheets; Task 02 `01_Users_1000` | Controlled status list (Task 01 dictionary); Controlled list (Task 02 dictionary) | Evidenced (simulated) — both workbooks |
+| `email_verification_status` | Categorical | Required | Simulated email verification state (observed: Verified, Pending) | Task 01 user sheets only | Verified/Pending (Task 01 dictionary) | Evidenced (simulated) — Task 01 workbook only |
+| `verification_status` | Categorical (observed: Verified) | Not specified | Simulated verification state; assumed equivalent to Task 01 `email_verification_status` (naming discrepancy — §6) | Task 02 `01_Users_1000` only | Not defined in Task 02 data dictionary | Evidenced (simulated) — Task 02 workbook only |
+| `onboarding_status` | Categorical | Required | Simulated onboarding state (observed: Completed, Started) | Task 01 user sheets; Task 02 `01_Users_1000` | Completed/Started/Not Started (Task 01 dictionary) | Evidenced (simulated) — both workbooks |
+| `last_login_datetime` | Datetime (stored as Excel serial) | Conditional | Simulated latest login; the only login signal in either workbook | Task 01 user sheets only | Valid and >= registration (Task 01 dictionary) | Evidenced (simulated) — Task 01 workbook only |
+| `lifetime_sessions` | Integer | Required | Simulated total session count (a count, not a session identifier) | Task 01 user sheets only | >=0 (Task 01 dictionary) | Evidenced (simulated) — Task 01 workbook only |
+| `active_days` | Integer | Required | Simulated distinct active days | Task 01 user sheets only | <= sessions (Task 01 dictionary) | Evidenced (simulated) — Task 01 workbook only |
+| `xp_balance` | Integer | Required | Simulated XP balance | Task 01 user sheets only | >=0 (Task 01 dictionary) | Evidenced (simulated) — Task 01 workbook only |
+| `referral_code` | String | Required | Simulated referral identifier. Observed format: `VL850800` | Task 01 user sheets; Task 02 `01_Users_1000` | Non-empty (Task 01 dictionary) | Evidenced (simulated) — both workbooks |
+| `days_since_registration` | Decimal | Derived | Days from registration to the end of the dataset | Task 01 user sheets only | >=0 (Task 01 dictionary) | Evidenced (simulated) — Task 01 workbook only |
+| `is_active_7d` | Categorical (Yes/No) | Derived | Recent (7-day) activity flag | Task 01 user sheets only | Yes/No (Task 01 dictionary) | Evidenced (simulated) — Task 01 workbook only |
+| `is_active_30d` | Categorical (Yes/No) | Derived | 30-day activity flag | Task 01 user sheets only | Yes/No (Task 01 dictionary) | Evidenced (simulated) — Task 01 workbook only |
+| `consent_status` | Categorical | Required | Simulated consent state (observed: Accepted, Pending) | Task 01 user sheets only | Accepted/Pending (Task 01 dictionary) | Evidenced (simulated) — Task 01 workbook only |
+| `marketing_opt_in` | Categorical (Yes/No) | Required | Simulated marketing preference | Task 01 user sheets only | Yes/No (Task 01 dictionary) | Evidenced (simulated) — Task 01 workbook only |
+| `account_created_via` | Categorical | Required | Simulated registration method (observed: Web Registration) | Task 01 user sheets only | Web Registration/Google Sign-In (Task 01 dictionary) | Evidenced (simulated) — Task 01 workbook only |
+| `country` | Categorical (observed: India) | Not specified | Simulated country | Task 01 user sheets only | Not defined in Task 01 data dictionary | Evidenced (simulated) — Task 01 workbook only |
+| `data_environment` | Categorical | Not specified | Provenance marker, present only in the audit sheet (value: "SIMULATED — NOT ACTUAL VELOOP DATA") | Task 01 `Users_Messy_Audit` only | Not defined | Evidenced (simulated) — Task 01 audit sheet only |
+
+### 3.5 Session fields
+
+Source: Task 02 `02_Sessions` (7,913 session rows). Join keys `session_id` and `user_id` are specified in §3.3.
+
+| Field | Type | Required? | Purpose | Source | Validation | Status |
+|---|---|---|---|---|---|---|
+| `session_start` | Datetime (stored as Excel serial) | Required | Session start timestamp | Task 02 `02_Sessions` | Valid datetime (Task 02 dictionary) | Evidenced (simulated) — Task 02 workbook |
+| `session_end` | Datetime (stored as Excel serial) | Required | Session end timestamp | Task 02 `02_Sessions` | >= start (Task 02 dictionary) | Evidenced (simulated) — Task 02 workbook |
+| `session_duration_seconds` | Integer | Required | Session duration | Task 02 `02_Sessions` | >=0 (Task 02 dictionary) | Evidenced (simulated) — Task 02 workbook |
+| `device` | Categorical (observed: Android) | Not specified | Device for the session | Task 02 `02_Sessions`, `03_Feature_Events`, `05_Task_Activity` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `platform` | Categorical (observed: Web) | Not specified | Platform for the session | Task 02 `02_Sessions`, `03_Feature_Events` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `entry_point` | Categorical | Required | Simulated session entry location (observed: Home, Help/Support, Referral Page) | Task 02 `02_Sessions` | Controlled list (Task 02 dictionary) | Evidenced (simulated) — Task 02 workbook |
+| `exit_feature` | Categorical | Required | Last/exit feature recorded for the session (observed: Leaderboard, CAPTCHA, Follow & Earn) | Task 02 `02_Sessions` | Controlled list (Task 02 dictionary) | Evidenced (simulated) — Task 02 workbook |
+| `events_in_session` | Integer (observed) | Not specified | Number of events in the session | Task 02 `02_Sessions` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `features_used_count` | Integer (observed) | Not specified | Number of features used in the session | Task 02 `02_Sessions` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `session_status` | Categorical (observed: Completed) | Not specified | Session outcome state | Task 02 `02_Sessions` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+
+### 3.6 Event fields
+
+Source: Task 02 `03_Feature_Events` (35,704 event rows), mirrored in `10_Event_Data_Quality_Audit` (same columns, 35,714 rows with 35,704 unique `event_id` values). Join keys `event_id`, `user_id`, and `session_id` are specified in §3.3.
+
+| Field | Type | Required? | Purpose | Source | Validation | Status |
+|---|---|---|---|---|---|---|
+| `event_datetime` | Datetime (stored as Excel serial) | Required | Event timestamp | Task 02 `03_Feature_Events`, `10_Event_Data_Quality_Audit` | Valid datetime (Task 02 dictionary) | Evidenced (simulated) — Task 02 workbook |
+| `feature_name` | Categorical | Required | Feature associated with the event (observed in `03_Feature_Events`: Missions, Leaderboard, Wallet; the audit sheet contains mixed casing, with five additional lowercase variants — `daily reward`, `leaderboard`, `missions`, `wallet`, `watch ads` — see §6) | Task 02 `03_Feature_Events`, `10_Event_Data_Quality_Audit` | Controlled list (Task 02 dictionary) | Evidenced (simulated) — Task 02 workbook |
+| `event_name` | Categorical | Required | Specific behavioural event (observed: mission_viewed, leaderboard_viewed, wallet_viewed) | Task 02 `03_Feature_Events`, `10_Event_Data_Quality_Audit` | Controlled list (Task 02 dictionary) | Evidenced (simulated) — Task 02 workbook |
+| `event_status` | Categorical | Required | Event outcome/state (observed: Started) | Task 02 `03_Feature_Events`, `10_Event_Data_Quality_Audit` | Controlled list (Task 02 dictionary) | Evidenced (simulated) — Task 02 workbook |
+| `device` | Categorical (observed: Android) | Not specified | Device recorded with the event | Task 02 `03_Feature_Events`, `10_Event_Data_Quality_Audit` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `platform` | Categorical (observed: Web) | Not specified | Platform recorded with the event | Task 02 `03_Feature_Events`, `10_Event_Data_Quality_Audit` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `acquisition_source` | Categorical | Required (per Users dictionary) | Acquisition source repeated on each event row (observed: WhatsApp) | Task 02 `03_Feature_Events`, `10_Event_Data_Quality_Audit` | Controlled list (Task 02 Users dictionary) | Evidenced (simulated) — Task 02 workbook |
+| `sequence_number` | Integer | Required | Simulated event sequence within the session | Task 02 `03_Feature_Events`, `10_Event_Data_Quality_Audit` | >=1 (Task 02 dictionary) | Evidenced (simulated) — Task 02 workbook |
+| `reward_related_flag` | Categorical (Yes/No) | Not specified | Marks reward-related events | Task 02 `03_Feature_Events`, `10_Event_Data_Quality_Audit` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `xp_related_flag` | Categorical (Yes/No) | Not specified | Marks XP-related events | Task 02 `03_Feature_Events`, `10_Event_Data_Quality_Audit` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+
+### 3.7 Daily activity fields
+
+Source: Task 02 `04_Daily_Activity` (6,667 rows; one row per user per day). Join key `user_id` is specified in §3.3.
+
+| Field | Type | Required? | Purpose | Source | Validation | Status |
+|---|---|---|---|---|---|---|
+| `activity_date` | Date (stored as Excel serial) | Required | Date of simulated user activity | Task 02 `04_Daily_Activity` | Valid date (Task 02 dictionary) | Evidenced (simulated) — Task 02 workbook |
+| `session_count` | Integer | Required | Sessions represented on that day | Task 02 `04_Daily_Activity` | >=0 (Task 02 dictionary) | Evidenced (simulated) — Task 02 workbook |
+| `session_duration_minutes` | Decimal (observed) | Not specified | Total session time in minutes on that day | Task 02 `04_Daily_Activity` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `event_count` | Integer | Required | Events recorded on that day | Task 02 `04_Daily_Activity` | >=0 (Task 02 dictionary) | Evidenced (simulated) — Task 02 workbook |
+| `feature_count` | Integer (observed) | Not specified | Distinct features used that day | Task 02 `04_Daily_Activity` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `task_count` | Integer (observed) | Not specified | Tasks attempted that day | Task 02 `04_Daily_Activity` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `completed_task_count` | Integer (observed) | Not specified | Tasks completed that day | Task 02 `04_Daily_Activity` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `reward_activity_count` | Integer (observed) | Not specified | Reward-related activities that day | Task 02 `04_Daily_Activity` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `xp_activity_count` | Integer (observed) | Not specified | XP-related activities that day | Task 02 `04_Daily_Activity` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `streak_activity` | Categorical (Yes/No) | Not specified | Streak activity flag for the day | Task 02 `04_Daily_Activity` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `daily_reward_claimed` | Categorical (Yes/No) | Not specified | Daily reward claimed flag | Task 02 `04_Daily_Activity` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `mission_activity` | Categorical (Yes/No) | Not specified | Mission activity flag | Task 02 `04_Daily_Activity` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `spin_activity` | Categorical (Yes/No) | Not specified | Spin activity flag | Task 02 `04_Daily_Activity` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `referral_activity` | Categorical (Yes/No) | Not specified | Referral activity flag | Task 02 `04_Daily_Activity` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `wallet_activity` | Categorical (Yes/No) | Not specified | Wallet activity flag | Task 02 `04_Daily_Activity` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `active_flag` | Categorical (Yes/No) | Not specified | Active flag for the day | Task 02 `04_Daily_Activity` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+
+### 3.8 Task activity fields
+
+Source: Task 02 `05_Task_Activity` (9,846 rows). Join keys `user_id` and `session_id` are specified in §3.3.
+
+| Field | Type | Required? | Purpose | Source | Validation | Status |
+|---|---|---|---|---|---|---|
+| `activity_id` | String | Required | Unique task activity record. Observed format: `ACT0000001`. Identifies a task activity, **not** a transaction | Task 02 `05_Task_Activity` | Unique/non-null (Task 02 dictionary) | Evidenced (simulated) — Task 02 workbook |
+| `task_id` | String (observed format: `TASK0071`) | Not specified | Identifier of the task the activity relates to | Task 02 `05_Task_Activity` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `task_category` | Categorical | Required | Simulated task category (observed: Game, Survey, Advertisement) | Task 02 `05_Task_Activity` | Controlled list (Task 02 dictionary) | Evidenced (simulated) — Task 02 workbook |
+| `task_viewed_at` | Datetime (stored as Excel serial) | Not specified | Time the task was viewed | Task 02 `05_Task_Activity` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `task_started_at` | Datetime (stored as Excel serial) | Not specified | Time the task was started | Task 02 `05_Task_Activity` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `task_completed_at` | Datetime (stored as Excel serial; blank when not completed) | Not specified (conditional in practice) | Time the task was completed; blank in the Failed/Abandoned rows read | Task 02 `05_Task_Activity` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `task_status` | Categorical | Required | Task outcome (observed: Completed, Failed, Abandoned) | Task 02 `05_Task_Activity` | Controlled list (Task 02 dictionary) | Evidenced (simulated) — Task 02 workbook |
+| `failure_reason` | Categorical | Conditional | Reason for a failed/abandoned task (observed: "Task unavailable", "Validation failed"; blank when completed) | Task 02 `05_Task_Activity` | Controlled values (Task 02 dictionary) | Evidenced (simulated) — Task 02 workbook |
+| `reward_status` | Categorical (observed: Credited, Not Credited) | Not specified | Reward-credit outcome for the task. Closest transaction-like field in the simulated data — not a transaction identifier | Task 02 `05_Task_Activity` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `device` | Categorical (observed: Android, iOS) | Not specified | Device for the task activity | Task 02 `05_Task_Activity` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+
+### 3.9 Milestone fields
+
+Source: Task 02 `06_Milestones` (4,799 rows). Join keys `user_id` and `session_id` are specified in §3.3.
+
+| Field | Type | Required? | Purpose | Source | Validation | Status |
+|---|---|---|---|---|---|---|
+| `milestone_type` | Categorical | Required | Behavioural milestone reached (observed: first_task_completion, first_referral_activity, first_reward_activity) | Task 02 `06_Milestones` | Controlled list (Task 02 dictionary) | Evidenced (simulated) — Task 02 workbook |
+| `milestone_datetime` | Datetime (stored as Excel serial) | Required | Milestone timestamp | Task 02 `06_Milestones` | Valid datetime (Task 02 dictionary) | Evidenced (simulated) — Task 02 workbook |
+| `milestone_value` | Integer (observed) | Not specified | Value recorded with the milestone | Task 02 `06_Milestones` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+| `source_event` | String (observed: event names) | Not specified | Source event name for the milestone (observed: ad_started, ad_completed, leaderboard_viewed) | Task 02 `06_Milestones` | Not defined in data dictionary | Evidenced (simulated) — Task 02 workbook |
+
+### 3.10 What is evidenced, and what is not
+
+- **Evidenced in the simulated datasets:** every field in §3.4–§3.9, plus the identifiers `user_id`, `session_id`, and `event_id` (§3.3).
+- **Not evidenced in either workbook:** `transaction_id` (B1 §2.4). No transaction or redemption identifier, and no transactions table, exists in the simulated data; `reward_status` (§3.8) is the only reward-credit signal, at task level.
+- **Login tracking:** there are no per-login event records in either workbook. The only login signal is `last_login_datetime` (Task 01), so B1's "tracking login events" remains unverified against the provided data.
+- **Simulated vs production:** every field marked *Evidenced (simulated)* is proven only for the synthetic workbooks. Per each workbook's README, the data is fictional and must not be presented as actual VELOOP users, sessions, events, or production analytics. Production availability of all B2 fields remains to be verified.
+
+## 4. Data Quality and Validation Principles
+
+- Identifiers must not be empty when required.
+- Unique identifiers must not be duplicated.
+- Events must be associated with the correct user.
+- Session and transaction relationships must be maintained.
+- Missing or unavailable source information must be marked for verification rather than assumed.
+- The Task 01 workbook ships a `Users_Messy_Audit` sheet that, per its README, intentionally contains controlled missing values, malformed dates, and duplicates. The validation rules in §3 therefore describe the clean sheets; the audit sheet should be used to test validation logic, not as trusted data.
+
+## 5. Verification Status
+
+The identifiers and validation rules in this document represent proposed analytics requirements. Their availability in the actual VELOOP platform must be verified against the relevant data sources and implementation.
+
+As of 2026-11-13, the B2 field set in §3 was cross-checked, in read-only mode, against the two workbooks in `source datasets/`. Fields marked *Evidenced (simulated)* were confirmed to be present in those workbooks, which are explicitly simulated data; their availability on the production VELOOP platform remains unverified.
+
+## 6. Open Questions
+
+1. **`transaction_id` (B1 §2.4)** is not present in either workbook. A production source or a rewards/redemption dataset is needed to verify transaction tracking.
+2. **Naming discrepancy:** Task 01 uses `email_verification_status`; Task 02 uses `verification_status`. They are assumed equivalent but this is unconfirmed.
+3. **`feature_name` casing:** `03_Feature_Events` uses Title case (e.g. "Missions", "Leaderboard", "Wallet"). `10_Event_Data_Quality_Audit` contains mixed casing: alongside the same Title-case names it has five lowercase variants — `daily reward`, `leaderboard`, `missions`, `wallet`, `watch ads`.
+4. **Fields marked "Not specified"** (e.g. `platform`, `country`, `device`, and most non-dictionary Task 02 columns) have no type/requirement/validation definitions in the workbook data dictionaries; the types shown are inferred from observed values only.
+5. **Controlled value lists** for categorical fields (e.g. the full sets of `milestone_type`, `event_status`, `task_category` values) were not enumerated; only values observed in the sample rows are cited.
+6. **Onboarding milestones:** only three sample rows of `06_Milestones` were read; whether onboarding-specific milestone types exist there is unverified.
+
+## 7. Revision History
+
+| Date | Change |
+|---|---|
+| 2026-11-13 | Added B2 field-wise specification (§3) based on read-only inspection of the two simulated workbooks in `source datasets/`. Former §3 and §4 renumbered to §4 and §5. Added Open Questions (§6) and this revision history (§7). B1 content (§1–§2) unchanged. |

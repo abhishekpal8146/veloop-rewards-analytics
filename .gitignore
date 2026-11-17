@@ -1,7 +1,6 @@
-# Local-only pre-correction snapshots (retained in the OneDrive workspace, not published)
-data/interim/backups/
+# VELOOP project
+#
+# Ignore the original private internship datasets.
+# These files must never be included in Git commits.
 
-# OS / editor artifacts
-Thumbs.db
-Desktop.ini
-.DS_Store
+source datasets/

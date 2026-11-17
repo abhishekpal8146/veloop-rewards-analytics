@@ -3,12 +3,12 @@
 2,Intake and evidence controls,Confirm Confirmed/Proposed/To Be Verified classifications,SA; classification rules,02; 19,Day 1,Complete,2026-11-10,Classification legend in Deliverable 02 section 2; ASM-001…ASM-008 recorded
 3,Product audit,Product Data Audit and Data Coverage Matrix,02; 03; SC1,02; 03,Days 1–2,Complete,2026-11-11,Deliverable 02 and 03 created from public website evidence only
 4,Product audit,Complete analytics-gap identification,03; SC1,03,Day 3,Complete,2026-11-11,12 analytics gaps in analytics_gaps.csv (requirement: at least 10) with priority and reason; completed ahead of schedule during Day 3
-5,User analytics,Identity registration login onboarding requirements,04; SD1,04,Days 3–4,Not started,,Avoid unnecessary personal information
-6,User analytics,Account lifecycle and user analytics specification,04,04,Day 5,Not started,,Status values remain Proposed until verified
-7,Earning and reward analytics,Task lifecycle and failed-activity classification,05; SE1,05,Days 3–4,Not started,,Failure taxonomy remains Proposed until verified
-8,Earning and reward analytics,Reward lifecycle and third-party dependencies,05; SE2,05,Day 7,Not started,,Distinguish activity from reward credited
-9,Wallet and withdrawal analytics,Wallet transaction model,06; SF1,06,Days 3–4,Not started,,Unsupported transaction types remain Proposed
-10,Wallet and withdrawal analytics,Withdrawal lifecycle and KPI requirements,06; SF1,06,Day 9,Not started,,No success-rate claim may be derived yet
+5,User analytics,Identity registration login onboarding requirements,04; SD1,04,Days 3–4,Complete,2026-11-13,D04 User Analytics Specification and SD1 completed (user_analytics_specification.md.txt); verified based on approved audit and simulated workbooks
+6,User analytics,Account lifecycle and user analytics specification,04,04,Day 5,Complete,2026-11-13,D04 account lifecycle and B2 field-wise specifications completed; verified based on simulated workbooks
+7,Earning and reward analytics,Task lifecycle and failed-activity classification,05; SE1,05,Days 5–6,Complete,2026-11-16,D05 task-level analytics and SE1 failure classification completed; QA verified
+8,Earning and reward analytics,Reward lifecycle and third-party dependencies,05; SE2,05,Day 7,Complete,2026-11-16,D05 reward analytics SE2 event requirements and C4 partner governance completed; QA verified
+9,Wallet and withdrawal analytics,Wallet transaction model,06; SF1,06,Days 7–8,Complete,2026-11-16,D06 unified wallet transaction ledger schema (D1) and polymorphic mapping completed; QA verified
+10,Wallet and withdrawal analytics,Withdrawal lifecycle and KPI requirements,06; SF1,06,Day 9,Complete,2026-11-16,D06 Section 11 KPI framework and SF1 withdrawal lifecycle completed; remediated with OQ-10; QA verified
 11,Referral and engagement analytics,Referral lifecycle and engagement measures,07; SG1,07,Days 3–4,Not started,,Registration must not equal conversion by assumption
 12,Event tracking,Event catalogue construction,08,08,04–07,Not started,,Cover at least 25 meaningful events
 13,Event tracking,Event properties status and KPI dependencies,08,08,Day 12,Not started,,Proposed events must not be described as implemented
