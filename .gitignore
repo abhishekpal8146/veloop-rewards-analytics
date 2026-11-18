@@ -1,6 +1,61 @@
-# VELOOP project
-#
-# Ignore the original private internship datasets.
-# These files must never be included in Git commits.
+# ============================================================
+# VELOOP Rewards Analytics — .gitignore
+# Priority: data safety > preserving deliverables > cleanliness
+# NOTE: no blanket *.csv / *.xlsx / *.md rules — deliverable
+# CSVs (registers, coverage matrix) must remain trackable.
+# ============================================================
 
+# --- Original/private source datasets (NEVER publish) ---
 source datasets/
+data/raw/
+data/generated_simulated/
+
+# --- Local-only backups and pre-correction snapshots ---
+data/interim/backups/
+*~
+*.bak
+*.backup
+*.orig
+
+# --- Temporary clones and working directories ---
+tmp/
+temp/
+*.tmp
+Temp/
+veloop-sync-*/
+veloop-push-*/
+
+# --- Logs and generated local-only artifacts ---
+*.log
+outputs/local/
+
+# --- Python caches and virtual environments ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# --- OS-generated junk ---
+Thumbs.db
+Desktop.ini
+.DS_Store
+$RECYCLE.BIN/
+
+# --- Credentials, tokens, secrets ---
+.env
+.env.*
+*.pem
+*.key
+*.pfx
+credentials*.json
+secrets*.json
+*token*.txt
+
+# --- Local editor / workspace settings ---
+.vscode/
+.idea/
+*.swp
+.suo
+.ntvs_analysis.dat
